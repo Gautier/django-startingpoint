@@ -1,106 +1,113 @@
-# Django settings for project project.
+# Django settings for autodestroy project.
 
-import calloway
 import os
 import sys
 
-CALLOWAY_ROOT = os.path.abspath(os.path.dirname(calloway.__file__))
-sys.path.insert(0, os.path.join(CALLOWAY_ROOT, 'apps'))
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+ADMINS = (
+    ('Gautier Hayoun', 'ghayoun@gmail.com'),
+)
+
+MANAGERS = ADMINS
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
+
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(PROJECT_ROOT, 'apps'))
 sys.path.insert(0, os.path.join(PROJECT_ROOT, 'lib'))
 
-try:
-    from local_settings import DEBUG as LOCAL_DEBUG
-    DEBUG = LOCAL_DEBUG
-except ImportError:
-    DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# On Unix systems, a value of None will cause Django to use the same
+# timezone as the operating system.
+# If running in a Windows environment this must be set to the same as your
+# system time zone.
+TIME_ZONE = 'Europe/London'
 
-from calloway.settings import *
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = 'en-gb'
 
-ADMINS = (
-    ('$$$$NAME$$$$', '$$$$EMAIL_ADDRESS$$$$'),
-)
-MANAGERS = ADMINS
-DEFAULT_FROM_EMAIL='$$$$EMAIL_ADDRESS$$$$'
-SERVER_EMAIL='$$$$EMAIL_ADDRESS$$$$'
+SITE_ID = 1
 
-SECRET_KEY = '$$$$SECRET_KEY$$$$'
-
-DATABASE_ENGINE = 'sqlite3'    # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'dev.db'       # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-
-TIME_ZONE = 'America/New_York'
-LANGUAGE_CODE = 'en-us'
+# If you set this to False, Django will make some optimizations so as not
+# to load the internationalization machinery.
 USE_I18N = True
 
-try:
-    from local_settings import MEDIA_URL_PREFIX
-except ImportError:
-    MEDIA_URL_PREFIX = "/media/"
-try:
-    from local_settings import MEDIA_ROOT_PREFIX
-except ImportError:
-    MEDIA_ROOT_PREFIX = os.path.join(PROJECT_ROOT, 'media')
-try:    
-    from local_settings import MEDIA_ROOT
-except ImportError:
-    MEDIA_ROOT = os.path.join(MEDIA_ROOT_PREFIX, 'uploads')
-try:
-    from local_settings import STATIC_ROOT
-except ImportError:
-    STATIC_ROOT = os.path.join(MEDIA_ROOT_PREFIX, 'static')
-    
+# If you set this to False, Django will not format dates, numbers and
+# calendars according to the current locale
+USE_L10N = True
 
-MEDIA_URL = '%suploads/' % MEDIA_URL_PREFIX
-STATIC_URL = "%sstatic/" % MEDIA_URL_PREFIX
-STATIC_MEDIA_APP_MEDIA_PATH = STATIC_ROOT
-STATIC_MEDIA_COPY_PATHS = (
-    {'from': os.path.join(CALLOWAY_ROOT, 'media'), 'to': STATIC_ROOT},
-    {'from': 'static', 'to': STATIC_ROOT},
+# Absolute path to the directory that holds media.
+# Example: "/home/media/media.lawrence.com/"
+MEDIA_ROOT = os.path.join("static")
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash if there is a path component (optional in other cases).
+# Examples: "http://media.lawrence.com", "http://example.com/media/"
+MEDIA_URL = '/media/'
+
+# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
+# trailing slash.
+# Examples: "http://foo.com/media/", "/media/".
+ADMIN_MEDIA_PREFIX = '/media/'
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = 'zaahje(@f@qe3lyeai*by9b#+r#r-^+d^)2v8%jyq0!q80__i0'
+
+# List of callables that know how to import templates from various sources.
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
-STATIC_MEDIA_COMPRESS_CSS = not DEBUG
-STATIC_MEDIA_COMPRESS_JS = not DEBUG
 
-MMEDIA_DEFAULT_STORAGE = 'media_storage.MediaStorage'
-MMEDIA_IMAGE_UPLOAD_TO = 'image/%Y/%m/%d'
+MIDDLEWARE_CLASSES = (
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+)
 
-AUTH_PROFILE_MODULE = ''
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.request',
+    'context_processor.context',
+)
+
+ROOT_URLCONF = 'autodestroy.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'templates'),
-) + CALLOWAY_TEMPLATE_DIRS
+)
 
-CACHE_BACKEND = 'memcached://localhost:11211/'
+INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    # Uncomment the next line to enable the admin:
+    # 'django.contrib.admin',
+    # Uncomment the next line to enable admin documentation:
+    # 'django.contrib.admindocs',
+)
 
-INSTALLED_APPS = APPS_CORE + \
-    APPS_ADMIN + \
-    APPS_STAFF + \
-    APPS_REVERSION + \
-    APPS_STORIES + \
-    APPS_CALLOWAY_DEFAULT + \
-    APPS_MPTT + \
-    APPS_CATEGORIES + \
-    APPS_COMMENT_UTILS + \
-    APPS_FRONTEND_ADMIN + \
-    APPS_MEDIA + \
-    APPS_UTILS + \
-    APPS_REGISTRATION + \
-    APPS_TINYMCE 
-
-ADMIN_TOOLS_THEMING_CSS = 'admin/css/theming.css'
-# ADMIN_TOOLS_MENU = 'menu.CustomMenu'
-
-TINYMCE_JS_URL = '%sjs/tiny_mce/tiny_mce.js' % STATIC_URL
-TINYMCE_JS_ROOT = os.path.join(STATIC_ROOT, 'js/tiny_mce')
 
 try:
     from local_settings import *
