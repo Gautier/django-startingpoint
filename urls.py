@@ -7,7 +7,9 @@ from django.conf import settings
 
 urlpatterns = patterns('',
     # Example:
-    # (r'^autodestroy/', include('autodestroy.foo.urls')),
+    (r'', include('website.urls',
+                                  namespace='website',
+                                  app_name='website')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
